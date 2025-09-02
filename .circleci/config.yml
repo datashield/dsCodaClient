@@ -36,7 +36,8 @@ jobs:
               sudo Rscript -e "install.packages('DSMolgenisArmadillo', dependencies=TRUE)"
               sudo Rscript -e "install.packages('DescTools', dependencies=TRUE)"
 
-              sudo Rscript -e "install.packages('xml2', dependencies=TRUE)"
+              sudo Rscript -e "install.packages('DSI', dependencies=TRUE)"
+              sudo Rscript -e "install.packages('knitr', dependencies=TRUE)"
       - run:
           command: |
               sudo Rscript -e 'library(covr); options("default_driver"="DSLiteDriver"); covr::codecov(token="'$CODECOV_TOKEN'", quiet=FALSE)'
