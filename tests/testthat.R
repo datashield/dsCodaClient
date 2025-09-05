@@ -7,6 +7,6 @@
 # * https://testthat.r-lib.org/articles/special-files.html
 
 library(testthat)
-library(dsBase)
+library(dsBaseClient)
 
 test_check("dsCodaClient")

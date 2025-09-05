@@ -1,0 +1,31 @@
+#
+# Copyright (c) 2025, ProPASS Consortium. All rights reserved.
+#
+# dsSurvivalClient docker composition - v1.1.0
+#
+# Usage: docker compose --file docker-compose_opal.yml up
+#
+
+services:
+    opal:
+        image: datashield/opal_citest:latest
+        ports:
+            - "8443:8443"
+        links:
+            - mongo
+            - rock
+        environment:
+            - OPAL_ADMINISTRATOR_PASSWORD=datashield_test&
+            - MONGO_HOST=mongo
+            - MONGO_PORT=27017
+            - MONGO_USER=root
+            - MONGO_PASSWORD=foobar
+            - ROCK_HOSTS=rock:8085
+            - ROCK_ADMINISTRATOR_PASSWORD=foobar
+    mongo:
+        image: mongo:4.4.15
+        environment:
+            - MONGO_INITDB_ROOT_USERNAME=root
+            - MONGO_INITDB_ROOT_PASSWORD=foobar
+    rock:
+        image: datashield/rock-margin-idiom-permissive:latest

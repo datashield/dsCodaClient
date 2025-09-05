@@ -29,7 +29,7 @@ test_that("setup", {
 
 context("ds.lrEM::arg empty arguments")
 test_that("empty arguments",  { 
-    expect_error(dsSurvivalClient::ds.lrEM(), "Please provide a valid variable name to transform")    
+    expect_error(dsCodaClient::ds.lrEM(), "Please provide a valid compositional dataset parameter \\(X\\)")
 })
 
 #

@@ -4,3 +4,4 @@
 ^README\.md$
 ^\.github$ 
 ^\.circleci$
+^docker-compose_opal\.yml$

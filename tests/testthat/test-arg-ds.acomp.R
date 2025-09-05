@@ -27,10 +27,16 @@ test_that("setup", {
 # Tests
 #
 
-context("ds.acomp::arg pred_obj is NULL")
-test_that("pred_obj is NULL",  {
+context("ds.acomp::arg no arguments")
+test_that("no arguments",  {
  
-    expect_error(dsSurvivalClient::ds.acomp(pred_obj = NULL), "Please provide a valid prediction object name!")    
+    expect_error(dsCodaClient::ds.acomp(), "Please provide a valid compositional dataset parameter \\(X\\)")
+})
+
+context("ds.acomp::arg X is NULL")
+test_that("X is NULL",  {
+ 
+    expect_error(dsCodaClient::ds.acomp(X = NULL), "Please provide a valid compositional dataset parameter \\(X\\)")
 })
 
 #
