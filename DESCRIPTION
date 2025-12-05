@@ -1,7 +1,7 @@
 Package: dsCodaClient
 Title: DataSHIELD client-side functions for compositional data analysis
 Description: DataSHIELD client functions for compositional data analysis using the compositions package.
-Version: 0.1.0
+Version: 0.2.0
 Author: Xavier Escriba Montagut and Stuart Wheater
 Maintainer: Xavier Escriba Montagut and Stuart Wheater <stuart.wheater@arjuna.com>
 License: GPL-3
@@ -10,7 +10,8 @@ Depends:
     DSI (>= 1.1.0)
 Suggests:
     knitr,
-    testthat
+    testthat,
+    httr
 RoxygenNote: 7.3.3
 Encoding: UTF-8
 VignetteBuilder: knitr 
