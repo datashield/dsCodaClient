@@ -1,0 +1,47 @@
+# Copyright (c) 2025. ProPASS Consortium. All rights reserved.
+
+version: 2.1
+
+jobs:
+  dscodaclient:
+    docker:
+#      - image: cimg/base:current
+      - image: cimg/base:2024.11
+    resource_class: small
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layout_caching: true
+      - run: |
+          echo "Building"
+          echo "  Repo Name: " $CIRCLE_PROJECT_REPONAME
+          echo "  Branch:    " $CIRCLE_BRANCH
+          echo "  Tag:       " $CIRCLE_TAG
+      - run:
+          command: |
+              sudo apt-get install --no-install-recommends software-properties-common dirmngr
+              wget -qO- https://cloud.r-project.org/bin/linux/ubuntu/marutter_pubkey.asc | sudo tee -a /etc/apt/trusted.gpg.d/cran_ubuntu_key.asc
+              sudo add-apt-repository -y "deb https://cloud.r-project.org/bin/linux/ubuntu $(lsb_release -cs)-cran40/"
+
+              sudo apt-get update -y
+              sudo apt-get install -y r-base-core cmake
+      - run:
+          command: |
+              sudo apt-get install -y libxml2-dev
+      - run:
+          command: |
+              sudo Rscript -e "install.packages('devtools', dependencies=TRUE)"
+              sudo Rscript -e "install.packages('covr', dependencies=TRUE)"
+
+              sudo Rscript -e "install.packages('DSMolgenisArmadillo', dependencies=TRUE)"
+              sudo Rscript -e "install.packages('DescTools', dependencies=TRUE)"
+
+              sudo Rscript -e "install.packages('DSI', dependencies=TRUE)"
+              sudo Rscript -e "install.packages('knitr', dependencies=TRUE)"
+      - run:
+          command: |
+              sudo Rscript -e 'library(covr); options("default_driver"="DSLiteDriver"); covr::codecov(token="'$CODECOV_TOKEN'", quiet=FALSE)'
+workflows:
+  build:
+    jobs:
+      - dscodaclient
