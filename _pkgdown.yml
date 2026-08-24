@@ -1,0 +1,5 @@
+template:
+  bootstrap: 5
+  params:
+    bootswatch: simplex
+url: https://github.com/datashield/dsCodaClient/
