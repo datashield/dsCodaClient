@@ -34,9 +34,9 @@
 #' deleted prior to imputation. Default is TRUE.
 #' @param objectname character string specifying the name of the new server-side object 
 #' which will store the log-ratio EM imputation result.
-#' @param datasources a list of \code{\link{DSConnection-class}} objects obtained after login. 
+#' @param datasources a list of \code{\link[DSI]{DSConnection-class}} objects obtained after login. 
 #' If the \code{datasources} argument is not specified, the default set of connections will be used: 
-#' see \code{\link{datashield.connections_default}}.
+#' see \code{\link[DSI]{datashield.connections_default}}.
 #' @return \code{ds.lrEM} returns a server-side object containing the imputed compositional 
 #' data set for use in compositional data analysis.
 #' @author DataSHIELD Development Team

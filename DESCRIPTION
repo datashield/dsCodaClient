@@ -12,6 +12,6 @@ Suggests:
     knitr,
     testthat,
     httr
-RoxygenNote: 7.3.3
 Encoding: UTF-8
 VignetteBuilder: knitr 
+Config/roxygen2/version: 8.1.0

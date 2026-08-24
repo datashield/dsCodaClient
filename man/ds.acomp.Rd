@@ -45,9 +45,9 @@ detection limit of all values, all columns or each value, respectively. Default 
 \item{objectname}{character string specifying the name of the new server-side object 
 which will store the Aitchison composition object.}
 
-\item{datasources}{a list of \code{\link{DSConnection-class}} objects obtained after login. 
+\item{datasources}{a list of \code{\link[DSI]{DSConnection-class}} objects obtained after login. 
 If the \code{datasources} argument is not specified, the default set of connections will be used: 
-see \code{\link{datashield.connections_default}}.}
+see \code{\link[DSI]{datashield.connections_default}}.}
 }
 \value{
 \code{ds.acomp} returns a server-side Aitchison composition object for use in

@@ -6,3 +6,4 @@
 ^\.circleci$
 ^docs$
 ^docker-compose_opal\.yml$
+^_pkgdown.yml$
