@@ -6,8 +6,8 @@ Author: Xavier Escriba Montagut and Stuart Wheater
 Maintainer: Xavier Escriba Montagut and Stuart Wheater <stuart.wheater@arjuna.com>
 License: GPL-3
 Depends:
-    R (>= 3.5.0),
-    DSI (>= 1.1.0)
+    R (>= 4.1.0),
+    DSI (>= 1.8.0)
 Suggests:
     knitr,
     testthat,
