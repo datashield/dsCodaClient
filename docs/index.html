@@ -7,18 +7,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>DataSHIELD client-side functions for compositional data analysis • dsCodaClient</title>
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
-<script src="deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
+<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/Source_Sans_Pro-0.4.10/font.css" rel="stylesheet">
+<link href="deps/Source_Code_Pro-0.4.10/font.css" rel="stylesheet">
+<link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="DataSHIELD client-side functions for compositional data analysis">
 <meta name="description" content="DataSHIELD client functions for compositional data analysis using the compositions package.">
 <meta property="og:description" content="DataSHIELD client functions for compositional data analysis using the compositions package.">
 </head>
 <body>
-    <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
+    <a href="#container" class="visually-hidden-focusable">Skip to content</a>
 
 
-    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
+    <nav class="navbar navbar-expand-lg fixed-top bg-none" data-bs-theme="light" aria-label="Site navigation"><div class="container">
 
     <a class="navbar-brand me-2" href="index.html">dsCodaClient</a>
 
@@ -31,25 +33,106 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
+<li class="nav-item"><a class="nav-link" href="articles/dsCodaClient.html">Get started</a></li>
 <li class="nav-item"><a class="nav-link" href="reference/index.html">Reference</a></li>
+<li class="nav-item"><a class="nav-link" href="articles/index.html">Articles</a></li>
       </ul>
 <ul class="navbar-nav">
 <li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="search.json">
 </form></li>
+<li class="nav-item"><a class="nav-link" href="https://github.com/datashield/dsCodaClient/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
 
   </div>
-</nav><div class="container template-home">
+</nav><div class="container template-home" id="container">
 <div class="row">
   <main id="main" class="col-md-9"><div class="section level1">
 <div class="page-header"><h1 id="dscodaclient">dsCodaClient<a class="anchor" aria-label="anchor" href="#dscodaclient"></a>
 </h1></div>
-<p>Cora DataSHIELD client site base functions</p>
+<p>DataSHIELD client-side functions for compositional data analysis (CoDa). Compositional data are vectors of parts that sum to a constant, such as the 24-hour movement behaviour composition (sleep, sedentary behaviour and physical activity intensities) studied in the ProPASS consortium. <code>dsCodaClient</code> drives the server-side package <a href="https://github.com/datashield/dsCoda" class="external-link">dsCoda</a>, which wraps the <a href="https://cran.r-project.org/package=compositions" class="external-link">compositions</a> and <a href="https://cran.r-project.org/package=zCompositions" class="external-link">zCompositions</a> packages, so that closure, zero replacement, log-ratio transforms and downstream analysis run across DataSHIELD servers without individual records leaving them.</p>
+<div class="section level2">
+<h2 id="functions">Functions<a class="anchor" aria-label="anchor" href="#functions"></a>
+</h2>
+<table class="table">
+<colgroup>
+<col width="50%">
+<col width="50%">
+</colgroup>
+<thead><tr class="header">
+<th>Function</th>
+<th>What it does</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><code><a href="reference/ds.lrEM.html">ds.lrEM()</a></code></td>
+<td>Replace zeros / values below detection limit with <code><a href="https://rdrr.io/pkg/zCompositions/man/lrEM.html" class="external-link">zCompositions::lrEM()</a></code> (server-side object).</td>
+</tr>
+<tr class="even">
+<td><code><a href="reference/ds.acomp.html">ds.acomp()</a></code></td>
+<td>Create a closed Aitchison composition with <code><a href="https://rdrr.io/pkg/compositions/man/acomp.html" class="external-link">compositions::acomp()</a></code> (server-side object).</td>
+</tr>
+<tr class="odd">
+<td><code><a href="reference/ds.ilr.html">ds.ilr()</a></code></td>
+<td>Compute isometric log-ratio coordinates, optionally with a user-supplied basis <code>V</code> (server-side object).</td>
+</tr>
+<tr class="even">
+<td><code><a href="reference/ds.meanComp.html">ds.meanComp()</a></code></td>
+<td>Pooled geometric-mean composition across all servers, returned to the client.</td>
+</tr>
+<tr class="odd">
+<td><code><a href="reference/build_sequential_ilr_V.html">build_sequential_ilr_V()</a></code></td>
+<td>Build the ILR basis for a sequential binary partition, for use with <code><a href="reference/ds.ilr.html">ds.ilr()</a></code>.</td>
+</tr>
+</tbody>
+</table>
 </div>
-  </main><aside class="col-md-3"><div class="license">
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># install.packages("remotes")</span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"datashield/dsCodaClient"</span><span class="op">)</span></span></code></pre></div>
+<p><code>dsCodaClient</code> needs <code>DSI</code> (&gt;= 1.8.0) and <code>dsBaseClient</code>; <code><a href="reference/ds.meanComp.html">ds.meanComp()</a></code> additionally uses <code>dsTidyverseClient</code> and <code>compositions</code> on the client. Once the package is published on the DataSHIELD CRAN mirror it will also be installable with <code>install.packages("dsCodaClient", repos = c("https://cran.obiba.org", "https://cloud.r-project.org"))</code>.</p>
+<p>Every DataSHIELD server you connect to must have <a href="https://github.com/datashield/dsBase" class="external-link">dsBase</a>, <a href="https://github.com/datashield/dsCoda" class="external-link">dsCoda</a> and, for the regression workflow in the vignette, <a href="https://github.com/molgenis/ds-tidyverse" class="external-link">dsTidyverse</a> installed.</p>
+</div>
+<div class="section level2">
+<h2 id="quick-start">Quick start<a class="anchor" aria-label="anchor" href="#quick-start"></a>
+</h2>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/datashield/DSI/" class="external-link">DSI</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">dsBaseClient</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/datashield/dsCodaClient">dsCodaClient</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># conns &lt;- DSI::datashield.login(logindata, assign = TRUE, symbol = "D")</span></span>
+<span></span>
+<span><span class="va">parts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"vpa"</span>, <span class="st">"mpa"</span>, <span class="st">"lipa"</span>, <span class="st">"sleep"</span>, <span class="st">"sb"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="reference/ds.acomp.html">ds.acomp</a></span><span class="op">(</span>X <span class="op">=</span> <span class="st">"D"</span>, parts <span class="op">=</span> <span class="va">parts</span>, objectname <span class="op">=</span> <span class="st">"comp"</span>, datasources <span class="op">=</span> <span class="va">conns</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">V</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/build_sequential_ilr_V.html">build_sequential_ilr_V</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">parts</span><span class="op">)</span>, <span class="va">parts</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/ds.ilr.html">ds.ilr</a></span><span class="op">(</span>X <span class="op">=</span> <span class="st">"comp"</span>, V <span class="op">=</span> <span class="va">V</span>, objectname <span class="op">=</span> <span class="st">"ilr_sbp"</span>, datasources <span class="op">=</span> <span class="va">conns</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="reference/ds.meanComp.html">ds.meanComp</a></span><span class="op">(</span><span class="st">"comp"</span>, datasources <span class="op">=</span> <span class="va">conns</span><span class="op">)</span></span></code></pre></div>
+<p>The vignette walks through the full workflow, including zero replacement and a pooled regression on the ILR coordinates, using <a href="https://cran.r-project.org/package=DSLite" class="external-link">DSLite</a> so no Opal server is needed: <code><a href="articles/dsCodaClient.html">vignette("dsCodaClient")</a></code> or the <a href="https://datashield.github.io/dsCodaClient/" class="external-link">package site</a>.</p>
+</div>
+<div class="section level2">
+<h2 id="license">License<a class="anchor" aria-label="anchor" href="#license"></a>
+</h2>
+<p>GPL-3. Developed by the ProPASS consortium and the DataSHIELD community.</p>
+</div>
+</div>
+  </main><aside class="col-md-3"><div class="links">
+<h2 data-toc-skip>Links</h2>
+<ul class="list-unstyled">
+<li><a href="https://github.com/datashield/dsCodaClient/">Browse source code</a></li>
+<li><a href="https://github.com/datashield/dsCodaClient/issues">Report a bug</a></li>
+</ul>
+</div>
+
+<div class="license">
 <h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
 <li><a href="https://www.r-project.org/Licenses/GPL-3" class="external-link">GPL-3</a></li>
@@ -67,8 +150,12 @@
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>Xavier Escriba Montagut <br><small class="roles"> Maintainer </small>   </li>
-<li><a href="authors.html">More about authors...</a></li>
+<li>
+<a href="https://github.com/ESCRI11" class="external-link">Xavier Escribà-Montagut</a> <br><small class="roles"> Author </small>   </li>
+<li>
+<a href="https://github.com/StuartWheater" class="external-link">Stuart Wheater</a> <br><small class="roles"> Author, maintainer </small>   </li>
+<li>
+<a href="https://datashield.org" class="external-link"><img src="https://raw.githubusercontent.com/datashield/dstemplate/main/man/figures/dscommunity.png" alt="DataSHIELD Community" width="90"></a> <br><small class="roles"> Copyright holder, funder </small>   </li>
 </ul>
 </div>
 
@@ -78,20 +165,16 @@
 </div>
 
 
-    <footer><div class="pkgdown-footer-left">
-  <p>Developed by Xavier Escriba Montagut.</p>
+   </div>
+  <footer><div class="container">
+  <div class="pkgdown-footer-left">
+  <p>Developed by <a href="https://github.com/ESCRI11" class="external-link">Xavier Escribà-Montagut</a>, <a href="https://github.com/StuartWheater" class="external-link">Stuart Wheater</a>, <a href="https://datashield.org" class="external-link"><img src="https://raw.githubusercontent.com/datashield/dstemplate/main/man/figures/dscommunity.png" alt="DataSHIELD Community" width="90"></a>.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
-    </footer>
-</div>
-
-
-
-
-
-  </body>
+  </div></footer>
+</body>
 </html>

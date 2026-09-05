@@ -1,0 +1,189 @@
+---
+title: "Compositional data analysis with dsCodaClient"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Compositional data analysis with dsCodaClient}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+# The whole vignette runs against DSLite, so it only evaluates when the full
+# DataSHIELD stack is installed. Elsewhere (e.g. R CMD check without dsBase)
+# the code is shown but not run.
+stack <- c("DSLite", "dsBase", "dsBaseClient", "dsCoda", "dsTidyverseClient",
+           "compositions", "zCompositions")
+knitr::opts_chunk$set(
+  collapse = TRUE, comment = "#>",
+  eval = all(vapply(stack, requireNamespace, logical(1), quietly = TRUE))
+)
+```
+
+## What this package does
+
+Compositional data (CoDa) are vectors of parts that carry relative
+information only: the parts sum to a constant, so increasing one part
+necessarily decreases the others, and standard statistics on the raw parts
+are misleading. The usual remedy is to work with log-ratios of the parts,
+which live in ordinary Euclidean space.
+
+The running example is the 24-hour movement behaviour composition used in
+the ProPASS consortium: minutes per day of vigorous physical activity
+(`vpa`), moderate physical activity (`mpa`), light physical activity
+(`lipa`), sleep (`sleep`) and sedentary behaviour (`sb`), which sum to 1440.
+
+`dsCodaClient` lets you run that workflow across DataSHIELD servers
+without seeing individual records. Every server needs `dsBase`, `dsCoda`
+and (for the regression step) `dsTidyverse` installed.
+
+## Data requirements
+
+* Parts are columns of a data frame; one row per participant.
+* Parts must be strictly positive. Zeros are not allowed in a composition,
+  so replace them first (see below).
+* Every server must hold the same parts under the same column names.
+
+## A DSLite session with three studies
+
+We simulate three studies. A handful of participants have zero minutes of
+vigorous activity, which is what happens in real accelerometer data.
+
+```{r data, message = FALSE}
+library(DSI)
+library(DSLite)
+library(dsBaseClient)
+library(dsTidyverseClient)
+library(dsCodaClient)
+
+set.seed(1)
+make_study <- function(n, zeros) {
+  x <- data.frame(
+    id = seq_len(n),
+    vpa = rgamma(n, 2, 1) * 10 + 1,
+    mpa = rgamma(n, 3, 1) * 30 + 1,
+    lipa = rgamma(n, 4, 1) * 60 + 1,
+    sleep = rnorm(n, 480, 40),
+    sb = rnorm(n, 600, 60),
+    bmi = rnorm(n, 26, 4)
+  )
+  x$vpa[sample(n, zeros)] <- 0
+  x
+}
+study1 <- make_study(120, 8)
+study2 <- make_study(150, 10)
+study3 <- make_study(90, 6)
+
+dslite.server <- newDSLiteServer(
+  tables = list(study1 = study1, study2 = study2, study3 = study3),
+  config = DSLite::defaultDSConfiguration(include = c("dsBase", "dsCoda", "dsTidyverse"))
+)
+
+builder <- DSI::newDSLoginBuilder()
+for (s in c("study1", "study2", "study3")) {
+  builder$append(server = s, url = "dslite.server", table = s, driver = "DSLiteDriver")
+}
+conns <- DSI::datashield.login(builder$build(), assign = TRUE, symbol = "D")
+```
+
+Against real servers you would build `logindata` with Opal or Armadillo
+credentials; everything after `datashield.login()` is identical.
+
+## 1. Replace zeros before closing the composition
+
+`ds.lrEM()` runs the log-ratio EM algorithm of `zCompositions::lrEM()`
+on the server. It replaces values flagged by `label` with imputed values
+below the detection limits in `dl`, given on the same scale as the data
+(minutes here). Do this on the raw parts, before `ds.acomp()`.
+
+```{r zeros, results = "hide"}
+parts <- c("vpa", "mpa", "lipa", "sleep", "sb")
+
+ds.select(df.name = "D", tidy_expr = list(vpa, mpa, lipa, sleep, sb),
+          newobj = "D_parts", datasources = conns)
+
+ds.lrEM(X = "D_parts", label = 0, dl = rep(1, length(parts)),
+        objectname = "D_imp", datasources = conns)
+```
+
+```{r zeros-check}
+ds.dim("D_imp", datasources = conns)
+```
+
+Note that `z.delete = TRUE` (the default) drops rows whose parts are all
+zero, so check the dimensions still match `D` before combining objects.
+
+## 2. Close the composition
+
+`ds.acomp()` creates a `compositions::acomp` object on each server. Parts
+can be given by name or index; `total = 1` rescales each row to
+proportions.
+
+```{r acomp, results = "hide"}
+ds.acomp(X = "D_imp", parts = parts, objectname = "comp", datasources = conns)
+```
+
+```{r acomp-check}
+ds.class("comp", datasources = conns)
+```
+
+## 3. Isometric log-ratio coordinates
+
+An ILR transform maps a D-part composition to D - 1 orthonormal
+coordinates. `build_sequential_ilr_V()` builds the basis for a
+sequential binary partition: coordinate 1 contrasts `vpa` against all
+other parts, coordinate 2 contrasts `mpa` against the parts after it, and
+so on. Reorder `parts` if you want a different first contrast.
+
+```{r basis}
+V <- build_sequential_ilr_V(length(parts), parts)
+round(V, 3)
+```
+
+`ds.ilr()` sends the basis to the servers and stores the coordinates. With
+`V = NULL` the default basis of `compositions::ilrBase()` is used instead.
+
+```{r ilr, results = "hide"}
+ds.ilr(X = "comp", V = V, objectname = "ilr_sbp", datasources = conns)
+```
+
+## 4. Pooled mean composition
+
+`ds.meanComp()` computes the mean of each ILR coordinate across all
+servers with `dsBaseClient::ds.mean(type = "combine")` and inverts the
+transform on the client. The result is the pooled geometric-mean
+composition, which is the compositional analogue of the arithmetic mean.
+
+```{r mean}
+mean_comp <- ds.meanComp("comp", datasources = conns)
+round(mean_comp, 4)
+round(mean_comp * 1440)  # back to minutes per day
+```
+
+## 5. Regression on the ILR coordinates
+
+The coordinates are stored as a `compositions::rmult` matrix, which
+`ds.glm()` cannot address by column. Convert it to a tibble first; the
+columns come out named `V1` to `V4`, where `V1` is the first column of
+`V` (`ilr1`), `V2` is `ilr2`, and so on.
+
+```{r regression, message = FALSE, warning = FALSE}
+ds.as_tibble("ilr_sbp", newobj = "ilr_tbl", datasources = conns)
+ds.colnames("ilr_tbl", datasources = conns)$study1
+
+fit <- ds.glm(
+  formula = "D$bmi ~ ilr_tbl$V1 + ilr_tbl$V2 + ilr_tbl$V3 + ilr_tbl$V4",
+  family = "gaussian", datasources = conns
+)
+round(fit$coefficients, 3)
+```
+
+Server-side messages and `glm.fit` convergence warnings from the
+single-step IRLS iterations are hidden in this chunk; they are normal for
+the DataSHIELD GLM algorithm and stay on the server with a real
+connection. The coefficient for `ilr_tbl$V1` is the change in BMI per
+unit increase of the first coordinate, i.e. more `vpa` relative to all
+other behaviours.
+
+```{r logout}
+DSI::datashield.logout(conns)
+```
