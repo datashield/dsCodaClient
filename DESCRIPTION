@@ -2,16 +2,29 @@ Package: dsCodaClient
 Title: DataSHIELD client-side functions for compositional data analysis
 Description: DataSHIELD client functions for compositional data analysis using the compositions package.
 Version: 0.2.0
-Author: Xavier Escriba Montagut and Stuart Wheater
-Maintainer: Xavier Escriba Montagut and Stuart Wheater <stuart.wheater@arjuna.com>
+Authors@R: c(
+    person("Xavier", "Escribà-Montagut", email = "xavier.escriba.montagut@gmail.com", role = "aut"),
+    person("Stuart", "Wheater", email = "stuart.wheater@arjuna.com", role = c("aut", "cre")),
+    person("DataSHIELD community", role = c("cph", "fnd"))
+  )
 License: GPL-3
+URL: https://github.com/datashield/dsCodaClient
+BugReports: https://github.com/datashield/dsCodaClient/issues
 Depends:
     R (>= 4.1.0),
     DSI (>= 1.8.0)
 Suggests:
     knitr,
+    rmarkdown,
     testthat,
-    httr
+    httr,
+    DSLite,
+    dsBase,
+    dsBaseClient,
+    dsCoda,
+    dsTidyverseClient,
+    compositions,
+    zCompositions
 Encoding: UTF-8
-VignetteBuilder: knitr 
+VignetteBuilder: knitr
 Config/roxygen2/version: 8.1.0

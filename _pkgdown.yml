@@ -1,5 +1,28 @@
 template:
+  package: dstemplate
   bootstrap: 5
-  params:
-    bootswatch: simplex
+
 url: https://github.com/datashield/dsCodaClient/
+
+authors:
+  Xavier Escribà-Montagut:
+    href: https://github.com/ESCRI11
+  Stuart Wheater:
+    href: https://github.com/StuartWheater
+
+reference:
+- title: Server-side assignment
+  desc: Create objects on the servers; nothing is returned to the client.
+  contents:
+  - ds.lrEM
+  - ds.acomp
+  - ds.ilr
+- title: Client-side helpers
+  contents:
+  - ds.meanComp
+  - build_sequential_ilr_V
+
+articles:
+- title: Tutorials
+  contents:
+  - dsCodaClient

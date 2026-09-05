@@ -1,10 +1,15 @@
 <urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
 <url><loc>https://github.com/datashield/dsCodaClient/404.html</loc></url>
 <url><loc>https://github.com/datashield/dsCodaClient/LICENSE-text.html</loc></url>
+<url><loc>https://github.com/datashield/dsCodaClient/articles/dsCodaClient.html</loc></url>
+<url><loc>https://github.com/datashield/dsCodaClient/articles/index.html</loc></url>
 <url><loc>https://github.com/datashield/dsCodaClient/authors.html</loc></url>
 <url><loc>https://github.com/datashield/dsCodaClient/index.html</loc></url>
+<url><loc>https://github.com/datashield/dsCodaClient/reference/build_sequential_ilr_V.html</loc></url>
 <url><loc>https://github.com/datashield/dsCodaClient/reference/ds.acomp.html</loc></url>
+<url><loc>https://github.com/datashield/dsCodaClient/reference/ds.ilr.html</loc></url>
 <url><loc>https://github.com/datashield/dsCodaClient/reference/ds.lrEM.html</loc></url>
+<url><loc>https://github.com/datashield/dsCodaClient/reference/ds.meanComp.html</loc></url>
 <url><loc>https://github.com/datashield/dsCodaClient/reference/index.html</loc></url>
 </urlset>
 
